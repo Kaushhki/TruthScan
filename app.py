@@ -3,9 +3,8 @@ import time
 from groq import Groq
 from tavily import TavilyClient
 
-# ─────────────────────────────────────────────
-# STEP 1: Connect to Groq (the AI brain) and Tavily (the web search tool)
-# ─────────────────────────────────────────────
+
+
 groq_client = Groq(api_key=st.secrets["GROQ_API_KEY"])
 tavily_client = TavilyClient(api_key=st.secrets["TAVILY_API_KEY"])
 
@@ -13,9 +12,8 @@ GROQ_MODEL = "llama-3.3-70b-versatile"
 
 st.set_page_config(page_title="Fake News Fact-Checker", page_icon="📰", layout="centered")
 
-# ─────────────────────────────────────────────
-# STYLE: gradient background, grid overlay, glass cards, custom type
-# ─────────────────────────────────────────────
+
+
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap');
@@ -164,9 +162,8 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-# ─────────────────────────────────────────────
-# STEP 2: Small helper to retry if we hit a rate limit (free tier has limits)
-# ─────────────────────────────────────────────
+
+
 def call_groq(messages, max_tokens=400, max_retries=3):
     for attempt in range(max_retries):
         try:
@@ -186,10 +183,8 @@ def call_groq(messages, max_tokens=400, max_retries=3):
     return None
 
 
-# ─────────────────────────────────────────────
-# STEP 3: Extract the core factual claim from the user's text
-# Handles Hindi, English, or mixed (Hinglish) automatically
-# ─────────────────────────────────────────────
+
+
 def extract_claim(text):
     prompt = f"""Extract the core factual claim from this text (it may be in Hindi, English, or Hinglish).
 Translate it to English if needed. Be concise — respond with ONE sentence only, nothing else.
@@ -199,9 +194,8 @@ Text: "{text}"
     return call_groq([{"role": "user", "content": prompt}], max_tokens=100)
 
 
-# ─────────────────────────────────────────────
-# STEP 4: Search the web for real evidence about the claim
-# ─────────────────────────────────────────────
+
+
 def search_evidence(claim):
     try:
         results = tavily_client.search(query=claim, max_results=5, search_depth="advanced")
@@ -211,9 +205,8 @@ def search_evidence(claim):
         return []
 
 
-# ─────────────────────────────────────────────
-# STEP 5: Ask the AI to weigh the evidence and give a verdict
-# ─────────────────────────────────────────────
+
+
 def synthesize_verdict(claim, evidence):
     sources_text = "\n\n".join(
         f"Source: {e['url']}\nContent: {e['content'][:500]}"
@@ -234,9 +227,8 @@ If the evidence is thin, unclear, or low quality, say NO_CLEAR_EVIDENCE rather t
     return call_groq([{"role": "user", "content": prompt}], max_tokens=400)
 
 
-# ─────────────────────────────────────────────
-# STEP 6: Simple surface-level warning signs (cheap, no API call needed)
-# ─────────────────────────────────────────────
+
+
 def surface_warning_signs(text):
     flags = []
     lowered = text.lower()
@@ -249,9 +241,8 @@ def surface_warning_signs(text):
     return flags
 
 
-# ─────────────────────────────────────────────
-# STEP 7: The UI itself
-# ─────────────────────────────────────────────
+
+
 st.markdown('<div class="glass-card">', unsafe_allow_html=True)
 st.subheader("Enter News Text")
 input_method = st.radio("Choose input method:", ["Text Box", "Example News"])
