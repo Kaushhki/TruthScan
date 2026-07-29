@@ -154,7 +154,7 @@ hr { border-color: rgba(255,255,255,0.2) !important; }
 </style>
 """, unsafe_allow_html=True)
 
-# Hero header
+
 st.markdown("""
 <div class="hero-eyebrow">AI-Powered Verification</div>
 <div class="hero-title">Truth Scan</div>
@@ -310,7 +310,7 @@ if st.button("Analyze News"):
 
             st.markdown('</div>', unsafe_allow_html=True)
 
-            # Step D: cheap surface-level signals (always shown, doesn't need internet)
+            
             flags = surface_warning_signs(user_input)
             if flags:
                 st.markdown('<div class="glass-card">', unsafe_allow_html=True)
