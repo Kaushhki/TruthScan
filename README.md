@@ -32,8 +32,9 @@ Built with Streamlit, [Groq](https://groq.com) (Llama 3.3 70B) for reasoning, an
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/truthscan.git
-cd truthscan
+
+git clone https://github.com/Kaushhki/TruthScan.git
+cd TruthScan
 ```
 
 ### 2. Install dependencies
